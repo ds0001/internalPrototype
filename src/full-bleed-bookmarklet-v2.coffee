@@ -17,6 +17,7 @@ do ->
         $('.internalPrototype-prototype').each ->
             name = $(this).find('.prototypename').text()
             if $(this).find("input[type=checkbox]").prop("checked")
+                CONFIG.prototypes[name].on = true
                 $(this).find('.internalPrototype-prototype-setting').each ->
                     val = $(this).find('input[type=text]').val()
                     settingname = $(this).find('.settingname').text()
