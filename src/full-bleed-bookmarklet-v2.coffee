@@ -1,53 +1,40 @@
-# cat jquery-2.1.3.min.js query-string.js full-bleed-bookmarklet-v2.js > full-bleed.js
-
 do ->
     'use strict'
-    
+
     if typeof(NYTD) == "undefined"
         window.NYTD = {}
     window.NYTD.InternalPrototype = {}
+
     CONFIG =
         "prototypes":
             "Full Bleed":
                 "on": true,
                 "settings":
-                    "safezone": "1,2,3,4"
-                    "image": ""
+                    "safezone": "0,1152,700,1350"
+                    "image": "http://static01.nyt.com/images/2015/01/18/magazine/18naming1-copy/18naming1-copy-superJumbo-v3.jpg"
+
     window.NYTD.InternalPrototype.reload = () ->
-        console.log "reload"
         $('.internalPrototype-prototype').each ->
             name = $(this).find('.prototypename').text()
             if $(this).find("input[type=checkbox]").prop("checked")
-                console.log 'found',this
                 $(this).find('.internalPrototype-prototype-setting').each ->
-                    console.log $(this).find('input[type=text]').val()
                     val = $(this).find('input[type=text]').val()
-                    console.log name
-                    console.log $(this).find('.settingname').text()
                     settingname = $(this).find('.settingname').text()
-                    # console.log CONFIG.prototypes[name]
-                    console.log CONFIG.prototypes[name].settings[settingname]
                     CONFIG.prototypes[name].settings[settingname] = val
-            # console.log CONFIG
-
-
+            else
+                CONFIG.prototypes[name].on = false
 
         for name of CONFIG.prototypes
-            if CONFIG.prototypes[name].on
-                #console.log decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
-                queryStringObj =
-                    prototype: name
-                    on: CONFIG.prototypes[name].on
-                    settings: decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
-        #console.log 'queryStringObj',queryStringObj
-        #console.log 'queryString.stringify(queryStringObj)',decodeURIComponent(queryString.stringify(queryStringObj))
+            queryStringObj =
+                prototype: name
+                on: CONFIG.prototypes[name].on
+                settings: decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
         location.search = decodeURIComponent(queryString.stringify(queryStringObj))
 
     if location.search
         qs = queryString.parse(location.search)
         settings = JSON.parse(qs.settings)
     else
-        # console.log queryString.stringify(CONFIG);
         for name of CONFIG.prototypes
             if CONFIG.prototypes[name].on
                 queryStringObj =
@@ -55,11 +42,8 @@ do ->
                     on: CONFIG.prototypes[name].on
                     settings: decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
                 # for setting of CONFIG.prototypes[name].settings
-                #     console.log 'CONFIG.prototypes[name].settings[setting]',CONFIG.prototypes[name].settings[setting]
                 #     queryStringObj.settings += setting + ":" + CONFIG.prototypes[name].settings[setting]
                 # #     settings: queryString.stringify(CONFIG.prototypes[name].settings)
-                # console.log 'queryStringObj',queryStringObj
-                # console.log queryString.stringify(queryStringObj)
         location.search = decodeURIComponent(queryString.stringify(queryStringObj))
         return
 

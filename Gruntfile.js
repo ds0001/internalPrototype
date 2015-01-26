@@ -7,15 +7,25 @@ grunt.initConfig({
       separator: ';',
     },
     dist: {
-      src: ['src/jquery-2.1.3.min.js', 'src/query-string.js', 'src/full-bleed-bookmarklet-v2.js'],
-      dest: 'dist/full-bleed.js',
+      src: ['src/query-string.js', 'src/full-bleed-bookmarklet-v2.js'],
+      dest: 'src/full-bleed.js',
     },
   },
+  uglify: {
+    options: {
+      mangle: false
+    },
+    my_target: {
+      files: {
+        'dist/full-bleed.js': ['src/full-bleed.js']
+      }
+    }
+  }
 });
 
   // Load the plugin that provides the "concat" task.
   grunt.loadNpmTasks('grunt-contrib-concat');
-
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   // Default task(s).
-  grunt.registerTask('default', ['concat']);
+  grunt.registerTask('default', ['concat', 'uglify']);
 };
