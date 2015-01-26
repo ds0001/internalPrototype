@@ -9,8 +9,10 @@ running the MWR app and a modal will appear with options.
 Building the bookmarklet.
 -------------------------
 If editing the main coffee file you will likely want to run a watcher.
-$:coffee -wc src/full-bleed-bookmarklet-v2.coffee
+
+`$:coffee -wc src/full-bleed-bookmarklet-v2.coffee`
 
 Once done and ready to build run grunt:
-$:grunt
+
+`$:grunt`
 
