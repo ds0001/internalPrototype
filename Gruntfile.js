@@ -6,9 +6,16 @@ grunt.initConfig({
     options: {
       separator: ';',
     },
-    dist: {
+    jsFiles: {
       src: ['src/query-string.js', 'src/full-bleed-bookmarklet-v2.js'],
       dest: 'src/full-bleed.js',
+    },
+    post: {
+      options: {
+        banner: "javascript:"
+      },
+      src: ['dist/full-bleed.js'],
+      dest: 'dist/full-bleed.js',
     },
   },
   uglify: {
@@ -27,5 +34,5 @@ grunt.initConfig({
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   // Default task(s).
-  grunt.registerTask('default', ['concat', 'uglify']);
+  grunt.registerTask('default', ['concat:jsFiles','uglify','concat:post']);
 };

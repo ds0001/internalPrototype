@@ -4,11 +4,13 @@
 
   (function() {
     'use strict';
-    var $internalPrototype, $overlay, $prototypeDiv, $settingCheckbox, $settingDiv, $settingTextbox, CONFIG, doneValues, labelText, name, prototypeConfig, prototypeIndex, prototypeName, qs, queryStringObj, setting, settings, value, _ref;
-    if (typeof NYTD === "undefined") {
+    var $exampleDiv, $internalPrototype, $overlay, $prototypeDiv, $settingCheckbox, $settingDiv, $settingTextbox, CONFIG, doneValues, example, index, labelText, name, prototypeConfig, prototypeIndex, prototypeName, qs, queryStringObj, setting, settings, value, _ref, _ref1;
+    if (typeof window.NYTD === "undefined") {
       window.NYTD = {};
     }
-    window.NYTD.InternalPrototype = {};
+    if (typeof window.NYTD.InternalPrototype === "undefined") {
+      window.NYTD.InternalPrototype = {};
+    }
     CONFIG = {
       "prototypes": {
         "Full Bleed": {
@@ -16,12 +18,13 @@
           "settings": {
             "safezone": "0,1152,700,1350",
             "image": "http://static01.nyt.com/images/2015/01/18/magazine/18naming1-copy/18naming1-copy-superJumbo-v3.jpg"
-          }
+          },
+          "exampleData": window.NYTD.InternalPrototype.exampleData["Full Bleed"]
         }
       }
     };
     window.NYTD.InternalPrototype.reload = function() {
-      var name, queryStringObj;
+      var name, queryStringObj, _results;
       $('.internalPrototype-prototype').each(function() {
         var name;
         name = $(this).find('.prototypename').text();
@@ -37,14 +40,15 @@
           return CONFIG.prototypes[name].on = false;
         }
       });
+      _results = [];
       for (name in CONFIG.prototypes) {
-        queryStringObj = {
+        _results.push(queryStringObj = {
           prototype: name,
           on: CONFIG.prototypes[name].on,
           settings: decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
-        };
+        });
       }
-      return location.search = decodeURIComponent(queryString.stringify(queryStringObj));
+      return _results;
     };
     if (location.search) {
       qs = queryString.parse(location.search);
@@ -100,6 +104,15 @@
         $settingCheckbox.data('value', value).data('prototypeName', prototypeName);
         $settingDiv.appendTo($prototypeDiv);
       }
+      $exampleDiv = $("<select name=\"examples\">");
+      _ref1 = prototypeConfig.exampleData;
+      for (index in _ref1) {
+        example = _ref1[index];
+        name = Object.keys(example)[0];
+        $("<option class=\"internalPrototype-prototye-example\" value=\"" + name + "\">" + name + "</option>\n").appendTo($exampleDiv);
+      }
+      $("</select>").appendTo($exampleDiv);
+      $exampleDiv.appendTo($prototypeDiv);
       $prototypeDiv.appendTo($internalPrototype);
     }
     $internalPrototype.append("<p style=\"font-size: smaller\">* currently active; <a href=\"#\" onclick=\"window.NYTD.InternalPrototype.reload(); return false\">reload</a> to apply changes</p>");

@@ -1,17 +1,19 @@
 do ->
     'use strict'
 
-    if typeof(NYTD) == "undefined"
+    if typeof(window.NYTD) == "undefined"
         window.NYTD = {}
-    window.NYTD.InternalPrototype = {}
+    if typeof(window.NYTD.InternalPrototype) == "undefined"
+        window.NYTD.InternalPrototype = {}
 
     CONFIG =
         "prototypes":
             "Full Bleed":
-                "on": true,
+                "on": true
                 "settings":
                     "safezone": "0,1152,700,1350"
                     "image": "http://static01.nyt.com/images/2015/01/18/magazine/18naming1-copy/18naming1-copy-superJumbo-v3.jpg"
+                "exampleData": window.NYTD.InternalPrototype.exampleData["Full Bleed"]
 
     window.NYTD.InternalPrototype.reload = () ->
         $('.internalPrototype-prototype').each ->
@@ -30,7 +32,7 @@ do ->
                 prototype: name
                 on: CONFIG.prototypes[name].on
                 settings: decodeURIComponent(JSON.stringify(CONFIG.prototypes[name].settings))
-        location.search = decodeURIComponent(queryString.stringify(queryStringObj))
+        # location.search = decodeURIComponent(queryString.stringify(queryStringObj))
 
     if location.search
         qs = queryString.parse(location.search)
@@ -153,6 +155,19 @@ do ->
 
             $settingDiv.appendTo $prototypeDiv
 
+        $exampleDiv = $("""
+            <select name="examples">
+        """)
+        for index,example of prototypeConfig.exampleData
+            name = Object.keys(example)[0]
+            $("""
+                <option class="internalPrototype-prototye-example" value="#{name}">#{name}</option>
+
+            """).appendTo $exampleDiv
+        $("""
+            </select>
+        """).appendTo $exampleDiv
+        $exampleDiv.appendTo $prototypeDiv
         $prototypeDiv.appendTo $internalPrototype
 
     $internalPrototype.append("""
